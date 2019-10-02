@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define INF (1e9 + 5)
+#define fi first
+#define se second
+
+void check(vector<vector<int> >& done, vector<vector<int> > num, int k, int l, int d, int& i) {
+    if(k < 0 or k == num.size() or l < 0 or l == num[0].size() or done[k][l] != -1 or num[k][l] != d) {
+        return;
+    }
+    done[k][l] = INF;
+    i++;
+    check(done, num, k-1, l, d, i);
+    check(done, num, k+1, l, d, i);
+    check(done, num, k, l-1, d, i);
+    check(done, num, k, l+1, d, i);
+    return;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int> > num(n, vector<int> (m));
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cin >> num[i][j];
+        }
+    }
+    int ans = 0;
+    for(int k = 0; k < n; k++) {
+        for(int l = 0; l < m; l++) {
+            vector<vector<int> > num1 = num;
+            vector<vector<int> > done(n, vector<int>(m, -1));
+            int temp1 = 0;
+            check(done, num1, k, l, num1[k][l], temp1);
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    int cur = i;
+                    while(cur-1 >= 0 and done[cur][j] == INF) {
+                        swap(num1[cur][j], num1[cur-1][j]);
+                        swap(done[cur][j], done[cur-1][j]);
+                        cur--;
+                    }
+                }
+            }
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    int temp2 = 0;
+                    if(done[i][j] != INF) {
+                        check(done, num1, k, l, num1[k][l], temp2);
+                    }
+                    ans = max(ans, temp1 * (temp1 - 1) + temp2 * (temp2 - 1));
+                }
+            }
+        }
+    }
+    cout << ans << endl;
+    return 0;
+}
