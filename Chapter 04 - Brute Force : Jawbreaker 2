@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define INF (1e9 + 5)
+#define fi first
+#define se second
+
+void check(vector<vector<bool> >& done, vector<vector<int> > num, int k, int l, int d, int& i) {
+    if(k < 0 or k == num.size() or l < 0 or l == num[0].size() or done[k][l] == true or num[k][l] != d) {
+        return;
+    }
+    done[k][l] = true;
+    i++;
+    check(done, num, k-1, l, d, i);
+    check(done, num, k+1, l, d, i);
+    check(done, num, k, l-1, d, i);
+    check(done, num, k, l+1, d, i);
+    return;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int> > num(n, vector<int> (m));
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cin >> num[i][j];
+        }
+    }
+    int ans = 0;
+    vector<vector<bool> > done(n, vector<bool>(m, false));
+    for(int k = 0; k < n; k++) {
+        for(int l = 0; l < m; l++) {
+            if(!done[k][l]) {
+                int temp = 0;
+                check(done, num, k, l, num[k][l], temp);
+                ans = max(temp, ans);
+            }
+        }
+    }
+    cout << ans * (ans - 1) << endl;
+    return 0;
+}
