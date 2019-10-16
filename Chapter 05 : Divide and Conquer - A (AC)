@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define INF (ll)(1e18 + 5)
+#define MOD (int)(1e9 + 7)
+#define ll long long
+
+ll sum(vector<ll>& v, ll m) {
+	ll temp = 0;
+	for(int k = 0; k < v.size(); k++) {
+		temp += m / v[k];
+	}
+	return temp;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+	int n, m;
+	cin >> n >> m;
+	vector<ll> v(n);
+	for(int i = 0; i < n; i++) {
+		cin >> v[i];
+	}
+	ll left = 0, right = 0;
+	ll high = 1LL<<58LL;
+	for(ll i = high; i > 0; i>>=1) {
+		while(left + i <= high and sum(v, left + i) < m) {
+			left += i;
+		}
+		while(right + i <= high and sum(v, right + i) <= m) {
+			right += i;
+		}
+	}
+	cout << right - left << endl;
+    return 0;
+}
