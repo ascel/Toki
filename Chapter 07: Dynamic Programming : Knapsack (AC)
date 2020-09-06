@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define INF (1e9 + 5)
+#define fi first
+#define se second
+
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    ll sack, n;
+    cin >> sack >> n;
+    vector<pair<ll, vector<int>>> dp(sack+1, pair<ll, vector<int>>({0, vector<int>()}));
+    for(int i = 1; i <= n; ++i) {
+        ll w, h;
+        cin >> w >> h;
+        for(ll weight = sack - w; weight >= 0; weight--) {
+            if(dp[weight].first + h > dp[weight + w].first) {
+                dp[weight + w].first = dp[weight].first + h;
+                dp[weight + w].second = dp[weight].second;
+                dp[weight + w].second.push_back(i);
+            }
+        }
+    }
+    int idx = -1;
+    ll temp = 0;
+    for(int i = 0; i < (int) dp.size(); ++i) {
+        if(temp < dp[i].first) {
+            idx = i;
+            temp = dp[i].first;
+        }
+    }
+    for(int i : dp[idx].second) {
+        cout << i << '\n';
+    }
+    return 0;
+}
